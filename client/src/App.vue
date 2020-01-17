@@ -47,6 +47,9 @@
               <div v-if="!loading && notMatched" class="text-center mb-4">
                 <h4>No account match this username</h4>
               </div>
+              <div v-if="!loading && strangeError" class="text-center mb-4">
+                <h4>Something went wrong. Ensure you have internet connectivity</h4>
+              </div>
             </div>
           </v-card>
 
@@ -66,6 +69,8 @@
 <script>
 
   import axios from 'axios';
+  import API_ROUTE from "./env";
+
 
   export default {
     data: () => ({
@@ -73,6 +78,7 @@
       checkAccounts: [],
       matchedAccount: [],
       notMatched: false,
+      strangeError: false,
       username: '',
       loading: false
     }),
@@ -118,14 +124,9 @@
     },
 
     methods: {
-      nothingMatched() {
-        this.matchedAccount = []
-        this.notMatched = true
-      },
-
       checkUsername() {
         this.loading = true
-        axios.post(`http://localhost:8888/username`, this.checkUrl)
+        axios.post(`${API_ROUTE}/username`, this.checkUrl)
              .then(res => {
                console.log("this is our response: ", res)
                if (res.status === 200) {
@@ -138,6 +139,9 @@
                this.loading = false
              }).catch(err => {
               this.loading = false
+              this.notMatched = false
+              this.strangeError = true
+              this.matchedAccount = []
               console.log("This is the error: ", err)
            })
         }
