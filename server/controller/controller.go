@@ -26,7 +26,7 @@ func Username(c *gin.Context) {
 	}
 	fmt.Println("the array: ", urls)
 
-	matchedUrls := service.UsernameCheck(urls)
+	matchedUrls := service.UsernameService.UsernameCheck(urls)
 
 	if len(matchedUrls) == 0 {
 		c.JSON(http.StatusNoContent, "No item")

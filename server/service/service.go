@@ -1,32 +1,26 @@
 package service
 
 import (
-	"net/http"
+	"username_across_platforms/server/provider"
 )
 
-func fetch(url string, c chan string){
-	resp, err := http.Get(url)
-	//we could not access that endpoint
-	if err != nil {
-		c <- "cant_access_resource"
-		return
-	}
-	//the response code may be 404, 422, etc
-	if resp.StatusCode > 299 {
-		c <- "no_match"
-	}
-	if resp.StatusCode == 200 {
-		c <- url
-	}
+type usernameCheck struct {}
+
+type usernameService interface {
+  UsernameCheck(urls []string) []string
 }
 
-func UsernameCheck(urls []string) []string {
+var (
+	UsernameService usernameService = &usernameCheck{}
+)
+
+func (u *usernameCheck) UsernameCheck(urls []string) []string {
 	c := make(chan string)
 	var links []string
 	var matchingLinks []string
 
 	for _, url := range urls {
-		go fetch(url, c)
+		go provider.Checker.CheckUrl(url, c)
 	}
 	for i := 0; i < len(urls); i++ {
 		links = append(links, <-c)
