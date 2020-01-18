@@ -12,7 +12,7 @@ type HTTPClient interface {
 	Get(url string) (*http.Response, error)
 }
 type clientCall struct {
-	Client *http.Client
+	Client http.Client
 }
 
 func (ci *clientCall) Get(url string) (*http.Response, error) {

@@ -132,8 +132,11 @@
                if (res.status === 200) {
                  this.matchedAccount = res.data
                  this.notMatched = false
+                 this.strangeError = false
+
                } else if(res.status === 204) { //this was returned from the backend
                  this.notMatched = true
+                 this.strangeError = false
                  this.matchedAccount = []
                }
                this.loading = false
