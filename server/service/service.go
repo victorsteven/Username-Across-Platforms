@@ -17,7 +17,7 @@ var (
 func (u *usernameCheck) UsernameCheck(urls []string) []string {
 	c := make(chan string)
 	var links []string
-	var matchingLinks []string
+	matchingLinks := []string{}
 
 	for _, url := range urls {
 		go provider.Checker.CheckUrl(url, c)
