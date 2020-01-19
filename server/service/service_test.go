@@ -48,7 +48,7 @@ func TestUsernameCheck_No_Match(t *testing.T) {
 	}
 	getRequestFunc = func(url string) (*http.Response, error) {
 		return &http.Response{
-			StatusCode:       http.StatusNotFound, //it can be 404, 422 or 500 depending the api
+			StatusCode:       http.StatusNotFound, //it can be 404, 422 or 500 depending the response from the endpoint
 		}, nil
 	}
 	client.ClientCall = &clientMock{}
@@ -74,3 +74,4 @@ func TestUsernameCheck_Url_Invalid(t *testing.T) {
 
 	assert.EqualValues(t, len(result), 0)
 }
+

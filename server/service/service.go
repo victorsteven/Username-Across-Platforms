@@ -11,6 +11,7 @@ type usernameService interface {
 }
 
 var (
+	//This is where the usernameCheck struct implements the usernameService interface
 	UsernameService usernameService = &usernameCheck{}
 )
 
