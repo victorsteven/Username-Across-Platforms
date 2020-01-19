@@ -11,26 +11,13 @@ import (
 var (
 	getRequestFunc func(url string) (*http.Response, error)
 )
+
 type clientMock struct {}
 
 //mocking the client call:
 func (cm *clientMock) Get(url string) (*http.Response, error) {
 	return getRequestFunc(url)
 }
-//type getCheckerMock struct{}
-//we are mocking the checkUrls method
-//func (cm *getCheckerMock) checkUrls(url string, c chan string){}
-
-//func TestUsernameCheck(t *testing.T) {
-//
-//	urls := []string{
-//		"http://twitter.com/stevensunflash",
-//		"http://github.com/stevensunflash",
-//		"http://instagram.com/stevensunflash",
-//		"http://bitbucket.com/stevensunflash",
-//		"http://dev.to/stevensunflash",
-//	}
-//}
 
 //When the api call is successful and the desired result is gotten
 func TestCheckUrls_Success(t *testing.T) {

@@ -1,90 +1,59 @@
 package service
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
+	"net/http"
 	"testing"
+	"username_across_platforms/server/client"
 )
 
 var (
-	getProviderFunc func(url string, c chan string)
+	getRequestFunc func(url string) (*http.Response, error)
 )
+type clientMock struct {}
 
-type checkerMock struct{}
-
-func (cm *checkerMock) CheckUrl(url string, c chan string) {}
+//mocking the client call, so we dont hit the real endpoint:
+func (cm *clientMock) Get(url string) (*http.Response, error) {
+	return getRequestFunc(url)
+}
 
 
 func TestUsernameCheck_Success(t *testing.T) {
-	//getProviderFunc = func(url string, c chan string){}
-	//provider.Checker = &checkerMock{}
+	urls := []string{
+		"http://twitter.com/stevensunflash",
+		"http://instagram.com/stevensunflash",
+		"http://dev.to/stevensunflash",
+	}
 
-		urls := []string{
-			"http://twitter.com/stevensunflash",
-			"http://github.com/stevensunflash",
-			"http://instagram.com/stevensunflash",
-			"http://bitbucket.com/stevensunflash",
-			"http://dev.to/stevensunflash",
-		}
+	getRequestFunc = func(url string) (*http.Response, error) {
+		return &http.Response{
+			StatusCode:       http.StatusOK,
+		}, nil
+	}
+	client.ClientCall = &clientMock{}
 
 	result := UsernameService.UsernameCheck(urls)
 
-	fmt.Println("the result: ", result)
-
+	assert.NotNil(t, result)
+	assert.EqualValues(t, len(result), 3)
 }
 
-//we are mocking the checkUrls method
-//func (cm *getCheckerMock) checkUrls(url string, c chan string){}
 
-//func TestUsernameCheck(t *testing.T) {
-//
-//	urls := []string{
-//		"http://twitter.com/stevensunflash",
-//		"http://github.com/stevensunflash",
-//		"http://instagram.com/stevensunflash",
-//		"http://bitbucket.com/stevensunflash",
-//		"http://dev.to/stevensunflash",
-//	}
-//}
+func TestUsernameCheck_No_Match(t *testing.T) {
+	urls := []string{
+		"http://twitter.com/no_match_username",
+		"http://instagram.com/no_match_username",
+		"http://dev.to/no_match_username",
+	}
+	getRequestFunc = func(url string) (*http.Response, error) {
+		return &http.Response{
+			StatusCode:       http.StatusNotFound, //it can be 404, 422 or 500 depending the api
+		}, nil
+	}
+	client.ClientCall = &clientMock{}
 
+	result := UsernameService.UsernameCheck(urls)
 
-
-//func TestCheckUrls_Success(t *testing.T) {
-//	url := "https://twitter.com/stevensunflash"
-//	ch := make(chan string)
-//	go provider.Checker.CheckUrls(url, ch)
-//	result := <-ch
-//	assert.NotNil(t, result)
-//	assert.EqualValues(t, "https://twitter.com/stevensunflash", result)
-//}
-//
-//func TestCheckUrls_Not_Existent_Url(t *testing.T) {
-//	url := "https://wrong.com/stevensunflash"
-//	ch := make(chan string)
-//	go provider.Checker.CheckUrls(url, ch)
-//	result := <-ch
-//	assert.NotNil(t, result)
-//	assert.EqualValues(t, "cant_access_resource", result)
-//}
-//
-//func TestCheckUrls_Username_Dont_Exist(t *testing.T) {
-//	url := "https://twitter.com/random_xxxxx_yyyy"
-//	ch := make(chan string)
-//	go provider.Checker.CheckUrls(url, ch)
-//	result := <-ch
-//	assert.NotNil(t, result)
-//	assert.EqualValues(t, "no_match", result)
-//}
-
-//func TestReposService_CreateRepoConcurrentInvalidRequest(t *testing.T) {
-//	request := repositories.CreateRepoRequest{}
-//	output := make(chan repositories.CreateRepositoriesResult)
-//
-//	service := reposService{}
-//	go service.CreateRepoConcurrent(request, output)
-//	result := <-output
-//	assert.NotNil(t, result)
-//	assert.Nil(t, result.Response)
-//	assert.NotNil(t, result.Error)
-//	assert.EqualValues(t, http.StatusBadRequest, result.Error.Status())
-//	assert.EqualValues(t, "Invalid repository name", result.Error.Message())
-//}
+	assert.Nil(t, result)
+	assert.EqualValues(t, len(result), 0)
+}
