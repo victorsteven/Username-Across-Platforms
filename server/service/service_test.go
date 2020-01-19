@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
@@ -49,6 +50,23 @@ func TestUsernameCheck_No_Match(t *testing.T) {
 		return &http.Response{
 			StatusCode:       http.StatusNotFound, //it can be 404, 422 or 500 depending the api
 		}, nil
+	}
+	client.ClientCall = &clientMock{}
+
+	result := UsernameService.UsernameCheck(urls)
+
+	assert.EqualValues(t, len(result), 0)
+}
+
+
+func TestUsernameCheck_Url_Invalid(t *testing.T) {
+	urls := []string{
+		"http://wrong.com/stevensunflash",
+		"http://wrong.com/stevensunflash",
+		"http://wrong.to/stevensunflash",
+	}
+	getRequestFunc = func(url string) (*http.Response, error) {
+		return nil, errors.New("cant_access_resource")
 	}
 	client.ClientCall = &clientMock{}
 
