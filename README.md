@@ -8,4 +8,5 @@ https://username-across.herokuapp.com
 
 Golang is used in the Backend <br/>
 VueJS is used in the Frontend <br/>
-Docker is used to Deploy the App on Heroku
+Docker is used to Deploy the App on Heroku <br/>
+Travis is used for Continuous Integration(CI)
