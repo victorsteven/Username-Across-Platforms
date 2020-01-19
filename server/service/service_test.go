@@ -13,7 +13,7 @@ var (
 type clientMock struct {}
 
 //mocking the client call, so we dont hit the real endpoint:
-func (cm *clientMock) Get(url string) (*http.Response, error) {
+func (cm *clientMock) GetValue(url string) (*http.Response, error) {
 	return getRequestFunc(url)
 }
 
@@ -54,6 +54,5 @@ func TestUsernameCheck_No_Match(t *testing.T) {
 
 	result := UsernameService.UsernameCheck(urls)
 
-	assert.Nil(t, result)
 	assert.EqualValues(t, len(result), 0)
 }

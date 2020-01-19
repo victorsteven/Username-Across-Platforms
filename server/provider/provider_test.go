@@ -15,7 +15,7 @@ var (
 type clientMock struct {}
 
 //mocking the client call:
-func (cm *clientMock) Get(url string) (*http.Response, error) {
+func (cm *clientMock) GetValue(url string) (*http.Response, error) {
 	return getRequestFunc(url)
 }
 

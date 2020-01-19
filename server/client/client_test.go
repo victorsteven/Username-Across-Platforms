@@ -34,7 +34,7 @@ func TestGetWithRoundTripper_Success(t *testing.T) {
 	})
 	api := clientCall{*client}
 	url := "https://twitter.com/stevensunflash" //this url can be anything
-	body, err := api.Get(url)
+	body, err := api.GetValue(url)
 	assert.Nil(t, err)
 	assert.NotNil(t, body)
 	assert.EqualValues(t, http.StatusOK, body.StatusCode)
@@ -51,7 +51,7 @@ func TestGetWithRoundTripper_No_Match(t *testing.T) {
 	})
 	api := clientCall{*client}
 	url := "https://twitter.com/no_match_random" //we passed in a user that is not found
-	body, err := api.Get(url)
+	body, err := api.GetValue(url)
 	assert.Nil(t, err)
 	assert.NotNil(t, body)
 	assert.EqualValues(t, http.StatusNotFound, body.StatusCode)
@@ -63,7 +63,7 @@ func TestGetWithRoundTripper_Failure(t *testing.T) {
 	})
 	api := clientCall{*client}
 	url := "https://invalid_url/stevensunflash" //we passed an invalid url
-	body, err := api.Get(url)
+	body, err := api.GetValue(url)
 	assert.NotNil(t, err)
 	assert.Nil(t, body)
 	assert.EqualValues(t, "Get https://invalid_url/stevensunflash: we couldn't access the url provided", err.Error())

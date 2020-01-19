@@ -50,32 +50,6 @@ func TestUsername_Success(t *testing.T) {
 	assert.EqualValues(t, 3, len(result))
 }
 
-//func TestUsername_No_Match(t *testing.T) {
-//	service.UsernameService = &serviceMock{} //will now make our fake struct to implement the "usernameService" interface
-//	getUsernameService = func(urls []string) []string {
-//		return []string{}
-//	}
-//	r := gin.Default()
-//	jsonBody := `["https://twitter.com/not_valid_username_xxx", "https://instagram.com/not_valid_username_xxx", "https://github.com/not_valid_username_xxx"]`
-//
-//	req, err := http.NewRequest(http.MethodPost, "/username", bytes.NewBufferString(jsonBody))
-//	if err != nil {
-//		t.Errorf("this is the error: %v\n", err)
-//	}
-//	rr := httptest.NewRecorder()
-//	r.POST("/username", Username)
-//	r.ServeHTTP(rr, req)
-//
-//	var result []string
-//	err = json.Unmarshal(rr.Body.Bytes(), &result)
-//
-//	assert.Nil(t, err)
-//	assert.NotNil(t, result) //the result is empty but not nil
-//	assert.EqualValues(t, http.StatusOK, rr.Code)
-//	assert.EqualValues(t, 0, len(result))
-//}
-
-
 //Here, we dont need to mock the service since we will never get there.
 func TestUsername_Invalid_Data(t *testing.T) {
 	r := gin.Default()

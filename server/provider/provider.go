@@ -10,7 +10,7 @@ type checker struct {}
 var Checker checkInterface = &checker{}
 
 func (check *checker) CheckUrl(url string, c chan string){
-	resp, err := client.ClientCall.Get(url)
+	resp, err := client.ClientCall.GetValue(url)
 	//we could not access that endpoint
 	if err != nil {
 		c <- "cant_access_resource"
